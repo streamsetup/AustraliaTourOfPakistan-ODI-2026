@@ -400,7 +400,7 @@ header {
       <div class="ch-list-head">LIVE_FEED</div>
       <div class="category-filter" id="category-bar">
         <button class="cat-btn active" onclick="filterCategory('All')">ALL</button>
-        <button class="cat-btn" onclick="filterCategory('Pakistan Super League')">PSL</button>
+        <button class="cat-btn" onclick="filterCategory('PAKvBAN')">PAKvBAN</button>
         <button class="cat-btn" onclick="filterCategory('Indian Premier League')">IPL</button>
       </div>
       <div class="ch-list" id="channel-list"></div>
@@ -410,16 +410,11 @@ header {
 
 <script>
   const CHANNELS = [
-    { id: 2, mode: "web", category: "Pakistan Super League", player: "hls", name: "Tamasha Pro English", url: "https://cdn5aws.tamashaweb.com/out/v1/9fff7780125a4614a7f3567bc506dc7a/index.m3u8?start=1777813200", key: "null", logo: "https://eapi.pcloud.com/getpubthumb?code=XZe0TAZ4VUePXYN8rSafbQdahHlB5pkov5V&linkpassword=&size=1828x1828&crop=0&type=auto", quality: "UPTO 1080p", fps: "25 FPS", vpn: "PAKISTAN" },
-    { id: 3, mode: "web", category: "Pakistan Super League", player: "hls", name: "Tamasha Pro Urdu", url: "https://cdn6aws.tamashaweb.com/out/v1/33441d8e8a3d4c289551e3fa151d5082/index.m3u8?start=1777813200", key: "null", logo: "https://eapi.pcloud.com/getpubthumb?code=XZe0TAZ4VUePXYN8rSafbQdahHlB5pkov5V&linkpassword=&size=1828x1828&crop=0&type=auto", quality: "UPTO 1080p", fps: "25 FPS", vpn: "PAKISTAN" },
-{ id: 98, mode: "app", category: "Pakistan Super League", name: "Pashto Commentary", url: "https://pslpashto.bigbaat.app/out/v1/1799181bba354dd388d75e5495c3a763/index.m3u8", logo: "https://eapi.pcloud.com/getpubthumb?code=XZnKkvZzlzsJg3FrQLNpWbMc0YmDV3bzWWV&linkpassword=&size=2460x816&crop=0&type=auto", quality: "UPTO 1080p", fps: "25 FPS", vpn: "Worldwide" },
-    { id: 4, mode: "web", category: "Pakistan Super League", player: "shaka", name: "Ten Sports", url: "https://tapmadlive.akamaized.net/tapmadold/tensports.smil/playlist.m3u8", key: "null", logo: "https://eapi.pcloud.com/getpubthumb?code=XZbQSwZsoPpvwKp48bVzqA3dWFkzJi7ybLX&linkpassword=undefined&size=1000x219&crop=0&type=auto", quality: "UPTO 720p", fps: "25 FPS", vpn: "PAKISTAN" },
-    { id: 5, mode: "web", category: "Pakistan Super League", player: "shaka", name: "ESPN", url: "https://live1-761f422bb93edb7b.fastly.foxtelgroupcdn.net.au/out/v1/adbaa04bfe5441199a037b7a78e6e62a/index.mpd", key: "4fd27d05c1bd43e88496c9c89770faaf:1b53ff84f9fefe4266920ec38376b9c1", logo: "https://images.channel5.eu/eGqxKQFYBvdaZ1gtJTHXn44tRBP25APwLvpWnRekeFAXNlW_IDQrMCNYX5qnzdAnRGfyyRXO6YRnV9j-sk3wOg.png", quality: "UPTO 1080p", fps: "50 FPS", vpn: "AUS VPN" },
-    { id: 7, mode: "app", category: "Pakistan Super League", name: "CricBuzz 2 ", url: "http://line.hmajtx.top:80/play/live.php?mac=00:1A:79:A3:BE:B0&stream=1109345&extension=m3u8", logo: "https://eapi.pcloud.com/getpubthumb?code=XZU0xKZ4ji5BkAs5rSuAFxyluOKfJEmnrkX&linkpassword=&size=850x276&crop=0&type=auto", quality: "720p/1080p", fps: "25 FPS", vpn: "Worldwide" },
-{ id: 7, mode: "app", category: "Pakistan Super League", name: "Worldwide Stream English", url: "https://psl.bigbaat.app/out/v1/f342445c31dd475bbf30c7304dbad14f/index.m3u8", logo: "https://eapi.pcloud.com/getpubthumb?code=XZnKkvZzlzsJg3FrQLNpWbMc0YmDV3bzWWV&linkpassword=&size=2460x816&crop=0&type=auto", quality: "UPTO 1080p", fps: "25 FPS", vpn: "Worldwide" },
-{ id: 7, mode: "app", category: "Pakistan Super League", name: "Worldwide Stream Urdu", url: "https://pslurdu.bigbaat.app/out/v1/0ef369b90c7b4025b76621e46ee5fb70/index.m3u8", logo: "https://eapi.pcloud.com/getpubthumb?code=XZnKkvZzlzsJg3FrQLNpWbMc0YmDV3bzWWV&linkpassword=&size=2460x816&crop=0&type=auto", quality: "UPTO 1080p", fps: "25 FPS", vpn: "Worldwide" },
-    { id: 8, mode: "app", category: "Pakistan Super League", name: "Willow Sports", url: "http://line.hmajtx.top:80/play/live.php?mac=00:1A:79:A3:BE:B0&stream=1951120&extension=m3u8" , logo: "https://eapi.pcloud.com/getpubthumb?code=XZB9YKZbvL8U70ec6FsHY8ffWIlMFEJBm4k&linkpassword=undefined&size=900x274&crop=0&type=auto", quality: "1080p", fps: "60 FPS", vpn: "Worldwide" },
-{ id: 9, mode: "app", category: "Indian Premier League", name: "Fox Cricket 501", url: "http://line.hmajtx.top:80/play/live.php?mac=00:1A:79:A3:BE:B0&stream=1520176&extension=m3u8", logo: "https://eapi.pcloud.com/getpubthumb?code=XZtLSwZmO6sXWSRdzyTLmmdSrhOJ4UBXHAX&linkpassword=undefined&size=583x800&crop=0&type=auto", quality: "1080P", fps: "50 FPS", vpn: "Worldwide" },
+    { id: 2, mode: "web", category: "PAKvBAN", player: "hls", name: "Tamasha Ad-free", url: "https://cdn5aws.tamashaweb.com/out/v1/9fff7780125a4614a7f3567bc506dc7a/index.m3u8?start=1777813200", key: "null", logo: "https://eapi.pcloud.com/getpubthumb?code=XZe0TAZ4VUePXYN8rSafbQdahHlB5pkov5V&linkpassword=&size=1828x1828&crop=0&type=auto", quality: "UPTO 1080p", fps: "25 FPS", vpn: "PAKISTAN" },
+    { id: 7, mode: "app", category: "PAKvBAN", name: "Fox Cricket 501", url: "http://line.hmajtx.top:80/play/live.php?mac=00:1A:79:A3:BE:B0&stream=1520176&extension=m3u8", logo: "https://eapi.pcloud.com/getpubthumb?code=XZtLSwZmO6sXWSRdzyTLmmdSrhOJ4UBXHAX&linkpassword=undefined&size=583x800&crop=0&type=auto", quality: "720p/1080p", fps: "50 FPS", vpn: "Worldwide" },
+    { id: 8, mode: "app", category: "PAKvBAN", name: "Willow Sports", url: "http://line.hmajtx.top:80/play/live.php?mac=00:1A:79:A3:BE:B0&stream=646948&extension=m3u8" , logo: "https://eapi.pcloud.com/getpubthumb?code=XZB9YKZbvL8U70ec6FsHY8ffWIlMFEJBm4k&linkpassword=undefined&size=900x274&crop=0&type=auto", quality: "1080p", fps: "60 FPS", vpn: "Worldwide" },
+{ id: 9, mode: "web", category: "Indian Premier League",player:"shaka", name: "Fox Cricket 501", url: "https://dck1-fs-/out/v1/814bffb9b389f652/d65feac5647949e6b45b2674d4715398/index.mpd",key:"dex.mpd", keys:{
+      "01c9bbf8137e58378a5ead514998a7b4": "fb01e61809e80e5e93a889cd31daab22"}, logo: "https://eapi.pcloud.com/getpubthumb?code=XZtLSwZmO6sXWSRdzyTLmmdSrhOJ4UBXHAX&linkpassword=undefined&size=583x800&crop=0&type=auto", quality: "1080P", fps: "50 FPS", vpn: "Worldwide" },
     { id: 9, mode: "app", category: "Indian Premier League", name: "Sky Sports Cricket", url: "http://line.hmajtx.top:80/play/live.php?mac=00:1A:79:A3:BE:B0&stream=1905864&extension=m3u8", logo: "https://images.channel5.eu/eGqxKQFYBvdaZ1gtJTHXn2iyNzKkWyCaVtDGlW13Af1t0jZW2ad8Cku7gDOclMphRZLGfTxvcfu4ICS_3k0Q5w.png", quality: "1080P", fps: "50 FPS", vpn: "Worldwide" },
 { id: 9, mode: "app", category: "Indian Premier League", name: "Sky Sports NZ 1", url: "http://line.hmajtx.top:80/play/live.php?mac=00:1A:79:A3:BE:B0&stream=1905864&extension=m3u8", logo: "https://images.channel5.eu/eGqxKQFYBvdaZ1gtJTHXn44tRBP25APwLvpWnRekeFDMIk8y3rFZMLR46PSmy78xpMboxuYPtedLmMDg1-YpBg.png", quality: "1080P", fps: "50 FPS", vpn: "Worldwide" },
 { id: 9, mode: "app", category: "Indian Premier League", name: "Star Sports 1 Hindi", url: "http://line.hmajtx.top:80/play/live.php?mac=00:1A:79:A3:BE:B0&stream=1905864&extension=m3u8", logo: "https://eapi.pcloud.com/getpubthumb?code=XZMjuKZSLY5pAb156JNHp6kvutm1kAiTHmk&linkpassword=&size=800x450&crop=0&type=auto", quality: "1080P", fps: "25 FPS", vpn: "Worldwide" }
@@ -639,7 +634,7 @@ header {
   function filterCategory(cat) {
     activeCategory = cat;
     document.querySelectorAll('.cat-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.innerText === (cat === 'Pakistan Super League' ? 'PSL' : cat === 'Indian Premier League' ? 'IPL' : 'ALL'));
+      btn.classList.toggle('active', btn.innerText === (cat === 'PAKvBAN' ? 'PAKvBAN' : cat === 'Indian Premier League' ? 'IPL' : 'ALL'));
     });
     renderChannels();
   }
