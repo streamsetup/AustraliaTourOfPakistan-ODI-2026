@@ -198,7 +198,7 @@ header {
 
 .live-btn:active { transform: scale(0.95); }
 
-.controls-overlay select, .fs-btn {
+.controls-overlay select, .fs-btn, .mute-btn {
   background: var(--liquid-glass);
   backdrop-filter: blur(15px) saturate(180%);
   -webkit-backdrop-filter: blur(15px) saturate(180%);
@@ -378,6 +378,7 @@ header {
             <select id="pad-regulator"><option value="none">FIT SCREEN</option><option value="padded">PADDED</option></select>
             <select id="aspect-regulator"><option value="default">ORIGINAL</option><option value="stretch">STRETCH</option><option value="zoom">ZOOM 16:9</option></select>
             <select id="quality-regulator"><option value="auto">AUTO QUALITY</option></select>
+            <button id="mute-toggle-btn" class="mute-btn" onclick="toggleMute()">UNMUTE</button>
             <button id="fs-toggle-btn" class="fs-btn" onclick="toggleFullscreen()">FULLSCREEN</button>
           </div>
 
@@ -410,8 +411,8 @@ header {
 
 <script>
   const CHANNELS = [
-    { id: 2, mode: "web", category: "PAKvBAN", player: "hls", name: "Tamasha Ad-free", url: "https://cdn04isb-n.tamashaweb.com:8087/jazzauth/PAKvsBANTS-2026-ABR/playlist.m3u8", key: "null", logo: "https://eapi.pcloud.com/getpubthumb?code=XZe0TAZ4VUePXYN8rSafbQdahHlB5pkov5V&linkpassword=&size=1828x1828&crop=0&type=auto", quality: "UPTO 1080p", fps: "25 FPS", vpn: "PAKISTAN" },
-    { id: 7, mode: "app", category: "PAKvBAN", name: "Fox Cricket 501", url: "http://line.hmajtx.top:80/play/live.php?mac=00:1A:79:A3:BE:B0&stream=1520176&extension=m3u8", logo: "https://eapi.pcloud.com/getpubthumb?code=XZtLSwZmO6sXWSRdzyTLmmdSrhOJ4UBXHAX&linkpassword=undefined&size=583x800&crop=0&type=auto", quality: "720p/1080p", fps: "50 FPS", vpn: "Worldwide" },
+   { id: 7, mode: "web", category: "PAKvBAN",player:"shaka", name: "Fox Cricket 501", url: "https://dck1-fs-live.dtcdn.dazn.com/out/v1/814bffb9b389f652/d65feac5647949e6b45b2674d4715398/index.mpd",key:"01c9bbf8137e58378a5ead514998a7b4:fb01e61809e80e5e93a889cd31daab22", logo: "https://eapi.pcloud.com/getpubthumb?code=XZtLSwZmO6sXWSRdzyTLmmdSrhOJ4UBXHAX&linkpassword=undefined&size=583x800&crop=0&type=auto", quality: "UPTO 1080p", fps: "50 FPS", vpn: "Worldwide" },
+ { id: 2, mode: "web", category: "PAKvBAN", player: "hls", name: "Tamasha Ad-free", url: "https://cdn04isb-n.tamashaweb.com:8087/jazzauth/PAKvsBANTS-2026-ABR/playlist.m3u8", key: "null", logo: "https://eapi.pcloud.com/getpubthumb?code=XZe0TAZ4VUePXYN8rSafbQdahHlB5pkov5V&linkpassword=&size=1828x1828&crop=0&type=auto", quality: "UPTO 1080p", fps: "25 FPS", vpn: "PAKISTAN" },
     { id: 8, mode: "app", category: "PAKvBAN", name: "Willow Sports", url: "http://line.hmajtx.top:80/play/live.php?mac=00:1A:79:A3:BE:B0&stream=646948&extension=m3u8" , logo: "https://eapi.pcloud.com/getpubthumb?code=XZB9YKZbvL8U70ec6FsHY8ffWIlMFEJBm4k&linkpassword=undefined&size=900x274&crop=0&type=auto", quality: "1080p", fps: "60 FPS", vpn: "Worldwide" },
 { id: 9, mode: "web", category: "Indian Premier League",player:"shaka", name: "Fox Cricket 501", url: "https://dck1-fs-/out/v1/814bffb9b389f652/d65feac5647949e6b45b2674d4715398/index.mpd",key:"dex.mpd", keys:{
       "01c9bbf8137e58378a5ead514998a7b4": "fb01e61809e80e5e93a889cd31daab22"}, logo: "https://eapi.pcloud.com/getpubthumb?code=XZtLSwZmO6sXWSRdzyTLmmdSrhOJ4UBXHAX&linkpassword=undefined&size=583x800&crop=0&type=auto", quality: "1080P", fps: "50 FPS", vpn: "Worldwide" },
@@ -449,6 +450,25 @@ header {
     document.getElementById('pause-icon').style.display = isPaused ? 'none' : 'block';
   }
 
+  function toggleMute() {
+    const isGeneric = document.getElementById('shaka-container').style.display !== 'none';
+    const muteBtn = document.getElementById('mute-toggle-btn');
+    
+    if (isGeneric) {
+      shakaVideo.muted = !shakaVideo.muted;
+      muteBtn.innerText = shakaVideo.muted ? "UNMUTE" : "MUTE";
+    } else {
+      if (clapprPlayer.getVolume() === 0) {
+        clapprPlayer.setVolume(100);
+        muteBtn.innerText = "MUTE";
+      } else {
+        clapprPlayer.setVolume(0);
+        muteBtn.innerText = "UNMUTE";
+      }
+    }
+    resetTimer();
+  }
+
   function updateProgress() {
     const isGeneric = document.getElementById('shaka-container').style.display !== 'none';
     const playLine = document.getElementById('play-line');
@@ -457,15 +477,22 @@ header {
     let duration, currentTime, bufferEnd = 0;
 
     if (isGeneric) {
-      currentTime = shakaVideo.currentTime;
-      duration = shakaVideo.duration;
       if (shakaInstance && !hlsInstance) {
           const seekRange = shakaInstance.seekRange();
-          duration = seekRange.end;
+          duration = seekRange.end - seekRange.start;
+          currentTime = Math.max(0, shakaVideo.currentTime - seekRange.start);
+          
           const bufferedInfo = shakaInstance.getBufferedInfo();
-          if (bufferedInfo && bufferedInfo.total.length > 0) bufferEnd = bufferedInfo.total[bufferedInfo.total.length - 1].end;
-      } else if (shakaVideo.buffered.length > 0) {
-          bufferEnd = shakaVideo.buffered.end(shakaVideo.buffered.length - 1);
+          if (bufferedInfo && bufferedInfo.total.length > 0) {
+              const lastBufferEnd = bufferedInfo.total[bufferedInfo.total.length - 1].end;
+              bufferEnd = Math.max(0, lastBufferEnd - seekRange.start);
+          }
+      } else {
+          currentTime = shakaVideo.currentTime;
+          duration = shakaVideo.duration;
+          if (shakaVideo.buffered.length > 0) {
+              bufferEnd = shakaVideo.buffered.end(shakaVideo.buffered.length - 1);
+          }
       }
     } else {
       duration = clapprPlayer.getDuration();
@@ -598,6 +625,9 @@ header {
     });
     
     renderChannels();
+    
+    // Explicitly mute the video element so browsers permit automated stream playback without human interaction
+    shakaVideo.muted = true;
     await selectChannel(0);
 
     document.getElementById('aspect-regulator').addEventListener('change', (e) => {
@@ -695,6 +725,7 @@ header {
     const clapprWrapper = document.getElementById('clappr-player-container');
     const shakaWrapper = document.getElementById('shaka-container');
     const qualitySelect = document.getElementById('quality-regulator');
+    const muteBtn = document.getElementById('mute-toggle-btn');
     qualitySelect.innerHTML = '<option value="auto">AUTO QUALITY</option>';
     clapprPlayer.pause();
     if (shakaInstance) await shakaInstance.unload();
@@ -730,9 +761,13 @@ header {
             });
           } catch(e) { console.error(e); }
       }
+      muteBtn.innerText = shakaVideo.muted ? "UNMUTE" : "MUTE";
     } else {
       shakaWrapper.style.display = 'none'; clapprWrapper.style.display = 'block';
-      clapprPlayer.load(ch.url); clapprPlayer.play();
+      clapprPlayer.load(ch.url);
+      clapprPlayer.setVolume(0); 
+      clapprPlayer.play();
+      muteBtn.innerText = "UNMUTE";
     }
     document.getElementById('current-ch-name').innerText = ch.name;
     document.getElementById('current-ch-category').innerText = ch.category;
