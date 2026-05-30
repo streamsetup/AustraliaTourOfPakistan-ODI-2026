@@ -402,7 +402,6 @@ header {
       <div class="category-filter" id="category-bar">
         <button class="cat-btn active" onclick="filterCategory('All')">ALL</button>
         <button class="cat-btn" onclick="filterCategory('Australia Tour Of Pakistan - ODI Series 2026')">PAKvAUS</button>
-        <button class="cat-btn" onclick="filterCategory('Indian Premier League')">IPL</button>
       </div>
       <div class="ch-list" id="channel-list"></div>
     </div>
@@ -411,9 +410,7 @@ header {
 
 <script>
   const CHANNELS = [
-   { id: 7, mode: "web", category: "Australia Tour Of Pakistan - ODI Series 2026",player:"shaka", name: "Fox Cricket 501", url: "https://dck1-fs-live.dtcdn.dazn.com/out/v1/814bffb9b389f652/d65feac5647949e6b45b2674d4715398/index.mpd",key:"01c9bbf8137e58378a5ead514998a7b4:fb01e61809e80e5e93a889cd31daab22", logo: "https://eapi.pcloud.com/getpubthumb?code=XZtLSwZmO6sXWSRdzyTLmmdSrhOJ4UBXHAX&linkpassword=undefined&size=583x800&crop=0&type=auto", quality: "UPTO 1080p", fps: "50 FPS", vpn: "Worldwide" },
-{ id: 9, mode: "web", category: "Indian Premier League",player:"shaka", name: "Fox Cricket 501", url: "https://dck1-fs-/out/v1/814bffb9b389f652/d65feac5647949e6b45b2674d4715398/index.mpd",key:"dex.mpd", keys:{
-      "01c9bbf8137e58378a5ead514998a7b4": "fb01e61809e80e5e93a889cd31daab22"}, logo: "https://eapi.pcloud.com/getpubthumb?code=XZtLSwZmO6sXWSRdzyTLmmdSrhOJ4UBXHAX&linkpassword=undefined&size=583x800&crop=0&type=auto", quality: "1080P", fps: "50 FPS", vpn: "Worldwide" }
+   { id: 7, mode: "web", category: "Australia Tour Of Pakistan - ODI Series 2026",player:"shaka", name: "Fox Cricket 501", url: "https://dck1-fs-live.dtcdn.dazn.com/out/v1/814bffb9b389f652/d65feac5647949e6b45b2674d4715398/index.mpd",key:"01c9bbf8137e58378a5ead514998a7b4:fb01e61809e80e5e93a889cd31daab22", logo: "https://eapi.pcloud.com/getpubthumb?code=XZtLSwZmO6sXWSRdzyTLmmdSrhOJ4UBXHAX&linkpassword=undefined&size=583x800&crop=0&type=auto", quality: "UPTO 1080p", fps: "50 FPS", vpn: "Worldwide" }
   ];
 
   let clapprPlayer, shakaInstance, shakaVideo, uiTimer, hlsInstance;
@@ -664,7 +661,7 @@ header {
   function filterCategory(cat) {
     activeCategory = cat;
     document.querySelectorAll('.cat-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.innerText === (cat === 'Australia Tour Of Pakistan - ODI Series 2026' ? 'PAKvAUS' : cat === 'Indian Premier League' ? 'IPL' : 'ALL'));
+      btn.classList.toggle('active', btn.innerText === (cat === 'Australia Tour Of Pakistan - ODI Series 2026' ? 'PAKvAUS' : 'ALL'));
     });
     renderChannels();
   }
